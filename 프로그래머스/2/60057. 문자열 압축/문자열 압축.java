@@ -9,15 +9,12 @@ class Solution {
         for (int i = 1; i <= originalS.length() / 2; i++) {
             s = originalS;
             StringBuilder compressed = new StringBuilder();
-            while (true) {
+            while (s.length() >= i) {
                 int repeat = compressing(s, i);
                 compressed.append(repeat == 1 ? "" : repeat).append(s, 0, i);
                 s = s.substring(i * repeat);
-                if (s.length() < i) {
-                    compressed.append(s);
-                    break;
-                }
             }
+            compressed.append(s);
             compressedArr[i] = compressed.toString();
         }
         Arrays.sort(compressedArr, Comparator.comparingInt(String::length));
