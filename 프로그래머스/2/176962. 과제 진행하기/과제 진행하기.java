@@ -28,7 +28,7 @@ class Solution {
                 continue;
             }
             
-            while (!s.isEmpty()) {
+            while (true) {
                 Plan cur = s.peek();
                 if (cur.start + cur.playtime <= p.start) {
                     answer[finished++] = s.pop().name;
