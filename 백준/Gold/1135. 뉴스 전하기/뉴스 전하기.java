@@ -23,18 +23,14 @@ public class Main {
         int[] maxTime = new int[N];
         for (int[] from : times) {
             List<Integer> to = company.get(from[1]);
-            if (to.isEmpty()) continue;
             List<Integer> timeList = new ArrayList<>();
             for (int i : to)
                 timeList.add(maxTime[i]);
 
             timeList.sort(Collections.reverseOrder());
             int max = 0;
-            int count = 1;
-            for (int time : timeList) {
-                max = Math.max(max, time + count);
-                count++;
-            }
+            for (int i = 0; i < timeList.size(); i++)
+                max = Math.max(max, i + 1 + timeList.get(i));
             maxTime[from[1]] = max;
         }
         System.out.println(maxTime[0]);
