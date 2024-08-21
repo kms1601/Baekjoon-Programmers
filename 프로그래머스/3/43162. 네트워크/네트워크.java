@@ -1,25 +1,29 @@
 import java.util.*;
 
 class Solution {
+    int[][] computers;
+    int n;
+    boolean[] visit;
+    
     public int solution(int n, int[][] computers) {
-        int count = 0;
-        boolean[] visit = new boolean[n];
-        Deque<Integer> queue = new LinkedList<>();
+        this.n = n;
+        this.computers = computers;
+        this.visit = new boolean[n];
         
+        int answer = 0;
         for (int i = 0; i < n; i++) {
-            if (visit[i]) continue;
-            queue.offer(i);
-            visit[i] = true;
-            count++;
-            while (!queue.isEmpty()) {
-                int cur = queue.poll();
-                for (int next = 0; next < n; next++) {
-                    if (computers[cur][next] == 0 || visit[next]) continue;
-                    queue.offer(next);
-                    visit[next] = true;
-                }
+            if (!visit[i]) {
+                dfs(i);
+                answer++;
             }
         }
-        return count;
+        return answer;
+    }
+    
+    private void dfs(int i) {
+        visit[i] = true;
+        for (int j = 0; j < n; j++) {
+            if (computers[i][j] == 1 && !visit[j]) dfs(j);
+        }
     }
 }
