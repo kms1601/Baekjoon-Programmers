@@ -4,7 +4,6 @@ import java.util.*;
 public class Main {
     private static int N;
     private static int[][] dominoes;
-    private static Set<Integer> row = new HashSet<>();
     private static Set<Integer> col = new HashSet<>();
     private static int min = Integer.MAX_VALUE;
     private static int max = Integer.MIN_VALUE;
@@ -28,39 +27,33 @@ public class Main {
         }
 
         for (int i = 0; i < N; i++) {
-            choose(new ArrayList<>(), i, 0);
+            choose(new int[N], 0, i);
         }
 
         System.out.println(min);
         System.out.println(max);
     }
 
-    private static void choose(List<int[]> result, int r, int c) {
-        result.add(new int[]{r, c});
-        row.add(r);
+    private static void choose(int[] result, int r, int c) {
+        result[r] = c;
         col.add(c);
 
-        if (result.size() == N) {
-            List<int[]> sorted = new ArrayList<>(result);
-            sorted.sort(Comparator.comparingInt(a -> a[0]));
-            int score = (countCycle(sorted) % 2 == 0 ? -1 : 1) * getScore(result);
+        if (r == N - 1) {
+            int score = (countCycle(result) % 2 == 0 ? -1 : 1) * getScore(result);
             min = Math.min(min, score);
             max = Math.max(max, score);
         } else {
             for (int i = 0; i < N; i++) {
-                for (int j = 0; j < N; j++) {
-                    if (row.contains(i) || col.contains(j)) continue;
-                    choose(result, i, j);
-                }
+                if (col.contains(i)) continue;
+                choose(result, r + 1, i);
             }
         }
 
-        result.remove(result.size() - 1);
-        row.remove(r);
+        result[r] = 0;
         col.remove(c);
     }
 
-    private static int countCycle(List<int[]> list) {
+    private static int countCycle(int[] arr) {
         boolean[] visit = new boolean[N];
         int count = 0;
         for (int i = 0; i < N; i++) {
@@ -69,16 +62,16 @@ public class Main {
             int cur = i;
             while (!visit[cur]) {
                 visit[cur] = true;
-                cur = list.get(cur)[1];
+                cur = arr[cur];
             }
         }
         return count;
     }
 
-    private static int getScore(List<int[]> list) {
+    private static int getScore(int[] arr) {
         int result = 1;
-        for (int[] cur : list) {
-            result *= dominoes[cur[0]][cur[1]];
+        for (int i = 0; i < N; i++) {
+            result *= dominoes[i][arr[i]];
         }
         return result;
     }
