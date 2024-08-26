@@ -1,10 +1,9 @@
 import java.io.*;
-import java.util.*;
 
 public class Main {
     private static int N;
     private static int[][] dominoes;
-    private static Set<Integer> col = new HashSet<>();
+    private static boolean[] col;
     private static int min = Integer.MAX_VALUE;
     private static int max = Integer.MIN_VALUE;
 
@@ -12,7 +11,7 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         N = Integer.parseInt(br.readLine());
 
-
+        col = new boolean[N];
         dominoes = new int[N][N];
         for (int i = 0; i < N; i++) {
             String input = br.readLine();
@@ -36,7 +35,7 @@ public class Main {
 
     private static void choose(int[] result, int r, int c) {
         result[r] = c;
-        col.add(c);
+        col[c] = true;
 
         if (r == N - 1) {
             int score = (countCycle(result) % 2 == 0 ? -1 : 1) * getScore(result);
@@ -44,13 +43,13 @@ public class Main {
             max = Math.max(max, score);
         } else {
             for (int i = 0; i < N; i++) {
-                if (col.contains(i)) continue;
+                if (col[i]) continue;
                 choose(result, r + 1, i);
             }
         }
 
         result[r] = 0;
-        col.remove(c);
+        col[c] = false;
     }
 
     private static int countCycle(int[] arr) {
