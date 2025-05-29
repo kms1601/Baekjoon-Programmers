@@ -10,7 +10,7 @@ public class Main {
         for (int t = 0; t < T; t++) {
             int N = Integer.parseInt(BR.readLine());
             String S = BR.readLine();
-            int[] distance = new int[N];
+            long[] distance = new long[N];
             Arrays.fill(distance, N - 1);
             for (int i = 0; i < N;) {
                 if (S.charAt(i) == '1') {
